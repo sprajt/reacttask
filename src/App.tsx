@@ -2,6 +2,12 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useCallback } from "react";
 
+/**
+ * Represents the data for the games.
+ * each object of the games[] stores one game
+ * each game contains 2 sides: home and away
+ * each side has different chances to score a goal, which is defined by 'odds'
+ */
 const data = {
   title: "Germany 2023",
   games: [
@@ -50,6 +56,9 @@ const data = {
   ],
 };
 
+/**
+ * Represents the main App component.
+ */
 function App() {
   const gamesArray = data.games;
   const [games, setGames] = useState(gamesArray);
@@ -57,6 +66,9 @@ function App() {
   const [gameStatus, setGameStatus] = useState("before");
   const [gameLength, setGameLength] = useState(90);
 
+  /**
+   * Handles the game status based on the current game status.
+   */
   function handleGameStatus() {
     if (gameStatus === "before") {
       setGameStatus((gameStatus) => "ongoing");
@@ -70,6 +82,9 @@ function App() {
     }
   }
 
+  /**
+   * Scores a goal for a random game.
+   */
   const scoreGoal = useCallback(() => {
     const randomIndex = Math.floor(Math.random() * games.length);
     const randomGame = games[randomIndex];
@@ -109,7 +124,9 @@ function App() {
     setTotalGoals((totalGoals) => totalGoals + 1);
   }, [games, setGames, setTotalGoals]);
 
-  // score  goal every 10 seconds
+  /**
+   * score goal every 10 seconds
+   */
   useEffect(
     function () {
       let intervalID: NodeJS.Timeout;
@@ -117,7 +134,7 @@ function App() {
         intervalID = setInterval(() => {
           scoreGoal();
           setGameLength((length) => length - 10);
-        }, 2000);
+        }, 10000);
       }
       return function () {
         clearInterval(intervalID);
@@ -126,7 +143,9 @@ function App() {
     [gameStatus, scoreGoal, gameLength]
   );
 
-  // stop game after 90 seconds
+  /**
+   * stop the game after gameLength reaches 0 (10 is deducted from gameLength initial value after each goal)
+   */
   useEffect(() => {
     if (gameLength === 0) {
       setGameLength(90);
@@ -154,6 +173,10 @@ function App() {
   );
 }
 
+/**
+ * Represents the list of games.
+ * @param games - The array of games.
+ */
 function GamesList({ games }: { games: any[] }) {
   return (
     <ul>
@@ -164,9 +187,13 @@ function GamesList({ games }: { games: any[] }) {
   );
 }
 
+/**
+ * Represents a single game.
+ * @param item - The game object.
+ */
 function SingleGame({ item }: { item: any }) {
   return (
-    //add highlight effect after the goal
+    // add highlight effect after the goal
     <li className={`game ${item.active ? "active" : ""}`}>
       <p>
         {item.home.name} vs {item.away.name}
