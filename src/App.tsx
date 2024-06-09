@@ -8,8 +8,8 @@ import { useCallback } from "react";
  * each game contains 2 sides: home and away
  * each side has different chances to score a goal, which is defined by 'odds'
  */
-const data = {
-  title: "Germany 2023",
+const simulationData = {
+  title: "Katar 2023",
   games: [
     {
       id: "1",
@@ -60,7 +60,7 @@ const data = {
  * Represents the main App component.
  */
 function App() {
-  const gamesArray = data.games;
+  const gamesArray = simulationData.games;
   const [games, setGames] = useState(gamesArray);
   const [totalGoals, setTotalGoals] = useState(0);
   const [gameStatus, setGameStatus] = useState("before");
@@ -156,7 +156,7 @@ function App() {
   return (
     <div className="App">
       <div className="container">
-        <h4>{data.title}</h4>
+        <h4>{simulationData.title}</h4>
         <button onClick={handleGameStatus}>
           {gameStatus === "before"
             ? "Start"
