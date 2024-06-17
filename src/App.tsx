@@ -197,7 +197,6 @@ function SingleGame({ item }: { item: any }) {
   useEffect(
     function () {
       if (item.active) {
-        //alert("true");
         if (activeEl.current !== null) {
           activeEl.current.classList.add("active");
           setTimeout(function () {
