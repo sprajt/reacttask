@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useEffect } from "react";
 import { useCallback } from "react";
 
@@ -192,9 +192,29 @@ function GamesList({ games }: { games: any[] }) {
  * @param item - The game object.
  */
 function SingleGame({ item }: { item: any }) {
+  const activeEl = useRef<HTMLLIElement | null>(null);
+
+  useEffect(
+    function () {
+      if (item.active) {
+        //alert("true");
+        if (activeEl.current !== null) {
+          activeEl.current.classList.add("active");
+          setTimeout(function () {
+            if (activeEl.current !== null) {
+              activeEl.current.classList.remove("active");
+            }
+          }, 1000);
+        }
+      }
+    },
+    [item.active]
+  );
+
   return (
     // add highlight effect after the goal
-    <li className={`game ${item.active ? "active" : ""}`}>
+    // <li ref={activeEl} className={`game ${item.active ? "active" : ""}`}>
+    <li ref={activeEl} className="game">
       <p>
         {item.home.name} vs {item.away.name}
         <span>
