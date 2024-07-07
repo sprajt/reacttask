@@ -3,66 +3,12 @@ import { useEffect } from "react";
 import { useCallback } from "react";
 
 /**
- * Represents the data for the games.
- * each object of the games[] stores one game
- * each game contains 2 sides: home and away
- * each side has different chances to score a goal, which is defined by 'odds'
- */
-const simulationData = {
-  title: "Katar 2023",
-  games: [
-    {
-      id: "1",
-      home: {
-        name: "Germany",
-        odds: 0.2,
-        score: 0,
-      },
-      away: {
-        name: "Poland",
-        odds: 0.8,
-        score: 0,
-      },
-      active: false,
-    },
-    {
-      id: "2",
-      home: {
-        name: "Brazil",
-        odds: 0.7,
-        score: 0,
-      },
-      away: {
-        name: "Mexico",
-        odds: 0.3,
-        score: 0,
-      },
-      active: false,
-    },
-    {
-      id: "3",
-      home: {
-        name: "Argentina",
-        odds: 0.6,
-        score: 0,
-      },
-      away: {
-        name: "Uruguay",
-        odds: 0.4,
-        score: 0,
-      },
-      active: false,
-    },
-  ],
-};
-
-/**
  * Represents the main App component.
  */
 function App() {
-  const gamesArray = simulationData.games;
-  const [startGames, setStartGames] = useState([]);
-  const [games, setGames] = useState(gamesArray);
+  const [startGames, setStartGames] = useState<any[]>([]);
+  const [games, setGames] = useState<any[]>([]);
+  const [title, setTitle] = useState("");
   const [totalGoals, setTotalGoals] = useState(0);
   const [gameStatus, setGameStatus] = useState("before");
   const [gameLength, setGameLength] = useState(90);
@@ -74,6 +20,7 @@ function App() {
       console.log(data);
       setStartGames(() => data.games);
       setGames(() => data.games);
+      setTitle(() => data.title);
     }
     getData();
   }, []);
@@ -168,7 +115,7 @@ function App() {
   return (
     <div className="App">
       <div className="container">
-        <h4>{simulationData.title}</h4>
+        <h4>{title}</h4>
         <button onClick={handleGameStatus}>
           {gameStatus === "before"
             ? "Start"
