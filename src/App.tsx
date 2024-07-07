@@ -13,14 +13,25 @@ function App() {
   const [gameStatus, setGameStatus] = useState("before");
   const [gameLength, setGameLength] = useState(90);
 
+  const [error, setError] = useState(false);
+
   useEffect(function () {
     async function getData() {
-      const res = await fetch("http://localhost:8000/data");
-      const data = await res.json();
-      console.log(data);
-      setStartGames(() => data.games);
-      setGames(() => data.games);
-      setTitle(() => data.title);
+      try {
+        const res = await fetch("http://localhost:8000/data");
+
+        if (!res.ok) throw new Error("Something went wrong with fetching data");
+
+        const data = await res.json();
+        console.log(data);
+        setStartGames(() => data.games);
+        setGames(() => data.games);
+        setTitle(() => data.title);
+        setError(false);
+      } catch (err: any) {
+        setError(true);
+        console.log(err.message);
+      }
     }
     getData();
   }, []);
@@ -116,14 +127,24 @@ function App() {
     <div className="App">
       <div className="container">
         <h4>{title}</h4>
-        <button onClick={handleGameStatus}>
-          {gameStatus === "before"
-            ? "Start"
-            : gameStatus === "ongoing"
-            ? "Finish"
-            : "Restart"}
-        </button>
+        {error === false && (
+          <button onClick={handleGameStatus}>
+            {gameStatus === "before"
+              ? "Start"
+              : gameStatus === "ongoing"
+              ? "Finish"
+              : "Restart"}
+          </button>
+        )}
         <GamesList games={games} />
+        {error ? (
+          <p>
+            Failed to fetch data. Run 'npm run server' on another terminal to fix
+            this
+          </p>
+        ) : (
+          ""
+        )}
         <p className="total-goals">
           Total goals: <span>{totalGoals}</span>
         </p>
