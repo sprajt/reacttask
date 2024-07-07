@@ -5,6 +5,7 @@ import { useCallback } from "react";
 /**
  * Represents the main App component.
  */
+
 function App() {
   const [startGames, setStartGames] = useState<any[]>([]);
   const [games, setGames] = useState<any[]>([]);
@@ -12,7 +13,6 @@ function App() {
   const [totalGoals, setTotalGoals] = useState(0);
   const [gameStatus, setGameStatus] = useState("before");
   const [gameLength, setGameLength] = useState(90);
-
   const [error, setError] = useState(false);
 
   useEffect(function () {
@@ -139,8 +139,8 @@ function App() {
         <GamesList games={games} />
         {error ? (
           <p>
-            Failed to fetch data. Run 'npm run server' on another terminal to fix
-            this
+            Failed to fetch data. Run 'npm run server' on another terminal to
+            fix this
           </p>
         ) : (
           ""
