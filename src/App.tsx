@@ -61,10 +61,22 @@ const simulationData = {
  */
 function App() {
   const gamesArray = simulationData.games;
+  const [startGames, setStartGames] = useState([]);
   const [games, setGames] = useState(gamesArray);
   const [totalGoals, setTotalGoals] = useState(0);
   const [gameStatus, setGameStatus] = useState("before");
   const [gameLength, setGameLength] = useState(90);
+
+  useEffect(function () {
+    async function getData() {
+      const res = await fetch("http://localhost:8000/data");
+      const data = await res.json();
+      console.log(data);
+      setStartGames(() => data.games);
+      setGames(() => data.games);
+    }
+    getData();
+  }, []);
 
   /**
    * Handles the game status based on the current game status.
@@ -75,7 +87,7 @@ function App() {
     } else if (gameStatus === "ongoing") {
       setGameStatus((gameStatus) => "stopped");
     } else if (gameStatus === "stopped") {
-      setGames(() => gamesArray);
+      setGames(() => startGames);
       setTotalGoals(() => 0);
       setGameLength(90);
       setGameStatus((gameStatus) => "ongoing");
